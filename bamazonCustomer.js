@@ -1,6 +1,8 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require('console.table');
+const chalk = require('chalk');
+
 
 
 var inputID;
@@ -23,7 +25,7 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
     if (err) throw err;
-    console.log("connected as id " + connection.threadId);
+    console.log("Connection ID: " + connection.threadId);
     afterConnection();
     // connection.end();
 
@@ -57,10 +59,10 @@ function askQuestion(){
         ]).then(function(user) {
             inputID = user.id-1;
             unitsOrdered = user.stock;
-            console.log(inputID);
+            // console.log(inputID);
 
             if(user.id > 10){
-                console.log("Please enter a valid item ID");
+                console.log(chalk.bold.red("Please enter a valid item ID"));
                 inquirer.prompt([
 
                     {
@@ -87,10 +89,12 @@ function askQuestion(){
             var itemStock = res[inputID].stock_quantity;
             var newStock = itemStock - unitsOrdered;
             var total = (res[inputID].price)*unitsOrdered
+            var num = total.toFixed(2);
+            // console.log(num);
             // Log all results of the SELECT statement
             if(newStock >= 0){
-                console.log("Your order has been placed! Your total is " + total);
-                console.log(newStock);
+                console.log(chalk.green("Your order has been placed! Your total is $" + chalk.green.underline.bold(num)));
+                // console.log(newStock);
 
                 var query = connection.query(
                     "UPDATE products SET ? WHERE ?",
@@ -128,7 +132,7 @@ function askQuestion(){
                     if(answer === "YES"){
                         afterConnection();
                     }else if(answer === "NO"){
-                        console.log("Come again :)")
+                        console.log(chalk.yellow("Come again :)"));
                         connection.end();
                     }
               });
