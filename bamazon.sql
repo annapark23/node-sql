@@ -14,33 +14,33 @@ CREATE TABLE products(
 );
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("mock", "mock", 1.00, 100);
+VALUES ("IPAD", "Apple", 200.00, 100);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("mock", "mock", 1.00, 100);
+VALUES ("Chair", "Sunjoy", 30.00, 100);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("mock", "mock", 1.00, 100);
+VALUES ("Pearl Earrings", "The Pearl Source", 100.00, 100);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("mock", "mock", 1.00, 100);
+VALUES ("Purse", "Gucci", 1000.00, 100);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("mock", "mock", 1.00, 100);
+VALUES ("Shoes", "Nike", 170.00, 100);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("mock", "mock", 1.00, 100);
+VALUES ("Sandals", "Chacos", 150.00, 100);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("mock", "mock", 1.00, 100);
+VALUES ("Hammock", "Eno", 70.00, 100);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("mock", "mock", 1.00, 100);
+VALUES ("Jacket", "Patagonia", 160.00, 100);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("mock", "mock", 1.00, 100);
+VALUES ("Pants", "Madewell", 128.00, 100);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("mock", "mock", 1.00, 100);
+VALUES ("Leggings", "Lululemon", 109.00, 100);
 
 SELECT * FROM products; 
