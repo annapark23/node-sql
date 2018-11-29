@@ -1,6 +1,9 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 
+var inputID;
+var unitsOrdered;
+
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -20,19 +23,19 @@ connection.connect(function(err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
     afterConnection();
+    // connection.end();
 
 });
 
 function afterConnection() {
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
-        console.log(res);
+        // console.log(res);
         res.forEach(function(r){
             console.log(`${r.item_id} | ${r.department_name} | ${r.price} | ${r.stock_quantity}`);
         })
         askQuestion();
 
-    // connection.end();
     })
 } 
 
@@ -50,11 +53,75 @@ function askQuestion(){
             message: "How many units would you like to buy?"
         }
       ]).then(function(user) {
-        var inputID = user.id;
-        var unitsOrdered = user.stock;
+        inputID = user.id;
+        unitsOrdered = user.stock;
 
-      
-        console.log(inputID + unitsOrdered);
+        connection.query("SELECT * FROM products", function(err, res) {
+            if (err) throw err;
+            // var printItem = res[inputID].product_name;
+            var itemStock = res[inputID].stock_quantity;
+            var newStock = itemStock - unitsOrdered;
+            var total = (res[inputID].price)*unitsOrdered
+            // Log all results of the SELECT statement
+            if(newStock >= 0){
+                console.log("Your order has been placed! Your total is " + total);
+                console.log(newStock);
+
+                var query = connection.query(
+                    "UPDATE products SET ? WHERE ?",
+                      [
+                        {
+                            stock_quantity: newStock
+                        },
+                        {
+                            item_id: inputID 
+                        }
+                      ],
+                    function(err, res) {
+                       console.log(res.affectedRows + " products updated!\n");
+                        showList();
+                    
+                      connection.end();
+
+                    }
+
+                  );
+
+            } else if (newStock < 0){
+                console.log("Insufficient quantity!");
+                inquirer.prompt([
+
+                    {
+                      type: "list",
+                      name: "again",
+                      message: "Would you like to continue shopping?",
+                      choices: ["YES", "NO"]
+                    }
+                  ]).then(function(user) {
+                    var answer = user.again;
+            
+                  
+                    if(answer === "YES"){
+                        askQuestion();
+                    }else if(answer === "NO"){
+                        console.log("Come again :)")
+                        connection.end();
+                    }
+              });
+            }
+          });
+
     });
+
 }
 
+function showList(){
+    connection.query("SELECT * FROM products", function(err, res) {
+        if (err) throw err;
+        res.forEach(function(r){
+            console.log(`${r.item_id} | ${r.department_name} | ${r.price} | ${r.stock_quantity}`);
+        })
+
+    })
+
+}
