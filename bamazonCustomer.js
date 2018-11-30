@@ -132,7 +132,7 @@ function askQuestion(){
                     if(answer === "YES"){
                         afterConnection();
                     }else if(answer === "NO"){
-                        console.log(chalk.yellow("Come again :)"));
+                        console.log(chalk.magenta("Come again :)"));
                         connection.end();
                     }
               });
